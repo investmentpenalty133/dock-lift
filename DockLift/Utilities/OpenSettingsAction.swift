@@ -76,6 +76,99 @@ enum OpenSettingsAction {
         window.makeKeyAndOrderFront(nil)
         window.orderFrontRegardless()
     }
+
+    // MARK: - Own window multi-display (DockLift Settings)
+
+    /// Content windows belonging to DockLift that should follow the Dock click screen.
+    static func ownContentWindows() -> [NSWindow] {
+        NSApp.windows.filter { window in
+            guard window.frame.width > 50, window.frame.height > 50 else { return false }
+            // Skip the invisible bootstrap helper.
+            if window.identifier?.rawValue.contains(bootstrapWindowID) == true { return false }
+            if window.alphaValue < 0.05 { return false }
+            if !window.isVisible && window.isMiniaturized == false {
+                // Still consider non-visible titled windows that exist (e.g. ordered out briefly).
+            }
+            let title = window.title.lowercased()
+            let id = window.identifier?.rawValue ?? ""
+            if id.contains(permissionGateWindowID) { return true }
+            if id.contains("SwiftUI.Settings") { return true }
+            if title.contains("settings") || title.contains("preferences")
+                || title.contains("docklift") || title.contains("accessibility")
+                || title.contains("设置") || title.contains("設定") || title.contains("辅助")
+            {
+                return true
+            }
+            // Any normal titled keyable window of this process (Settings / gate).
+            return window.styleMask.contains(.titled) && window.canBecomeKey
+        }
+    }
+
+    /// Screen implied by the latest pointer / Dock interaction.
+    static func preferredScreenForDockInteraction() -> NSScreen {
+        if let dock = DockGeometry.screenHostingDock(at: NSEvent.mouseLocation) {
+            return dock
+        }
+        if let under = ScreenCoordinates.screen(containingAppKitPoint: NSEvent.mouseLocation) {
+            return under
+        }
+        return NSScreen.main ?? NSScreen.screens[0]
+    }
+
+    /// Move DockLift’s own Settings / permission windows onto `screen` and key them.
+    /// Used when the user clicks DockLift in the Dock while a window is open on another display.
+    static func bringOwnWindows(to screen: NSScreen) {
+        if NSApp.activationPolicy() != .regular {
+            NSApp.setActivationPolicy(.regular)
+        }
+        NSApp.activate(ignoringOtherApps: true)
+
+        let windows = ownContentWindows()
+        if windows.isEmpty {
+            // No prefs open yet — open Settings / permission gate as usual.
+            request()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                placeWindows(ownContentWindows(), on: screen)
+            }
+            return
+        }
+
+        placeWindows(windows, on: screen)
+    }
+
+    /// Convenience: bring own windows to the screen of the current Dock / pointer.
+    static func bringOwnWindowsToDockScreen() {
+        bringOwnWindows(to: preferredScreenForDockInteraction())
+    }
+
+    private static func placeWindows(_ windows: [NSWindow], on screen: NSScreen) {
+        let visible = screen.visibleFrame
+        for window in windows {
+            var frame = window.frame
+            let onTarget: Bool = {
+                let inter = frame.intersection(visible)
+                guard !inter.isNull, !inter.isEmpty else { return false }
+                return (inter.width * inter.height) >= (frame.width * frame.height * 0.4)
+            }()
+
+            if !onTarget {
+                // Center on the destination display, keep size, clamp into visible frame.
+                frame.size.width = min(frame.width, visible.width)
+                frame.size.height = min(frame.height, visible.height)
+                frame.origin.x = visible.midX - frame.width / 2
+                frame.origin.y = visible.midY - frame.height / 2
+                frame.origin.x = min(max(frame.origin.x, visible.minX), visible.maxX - frame.width)
+                frame.origin.y = min(max(frame.origin.y, visible.minY), visible.maxY - frame.height)
+                window.setFrame(frame, display: true, animate: false)
+            }
+
+            if window.isMiniaturized {
+                window.deminiaturize(nil)
+            }
+            window.makeKeyAndOrderFront(nil)
+            window.orderFrontRegardless()
+        }
+    }
 }
 
 /// Lives inside the hidden bootstrap `Window` scene.

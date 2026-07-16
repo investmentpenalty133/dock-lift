@@ -20,13 +20,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    /// Dock icon click for an already-running DockLift (Settings often open on another display).
+    /// Always re-show preferences on the screen where the user clicked.
     func applicationShouldHandleReopen(
         _ sender: NSApplication,
         hasVisibleWindows flag: Bool
     ) -> Bool {
-        if !flag {
-            OpenSettingsAction.request()
-        }
+        // Regardless of whether a window is already visible (possibly on another
+        // monitor), pull our Settings / permission UI to the Dock click screen.
+        OpenSettingsAction.bringOwnWindowsToDockScreen()
         return true
     }
 }

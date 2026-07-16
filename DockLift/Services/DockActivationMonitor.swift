@@ -189,7 +189,15 @@ final class DockActivationMonitor: ObservableObject {
         guard let lastDockClickAt, Date().timeIntervalSince(lastDockClickAt) < 0.9 else { return }
 
         guard let app = NSWorkspace.shared.frontmostApplication else { return }
-        if app.processIdentifier == ProcessInfo.processInfo.processIdentifier { return }
+
+        // DockLift itself: Settings may sit on another display while we are frontmost.
+        // Do not use AX lift (we ignore our own bundle); move NSWindows directly.
+        if app.processIdentifier == ProcessInfo.processInfo.processIdentifier {
+            OpenSettingsAction.bringOwnWindowsToDockScreen()
+            lastEventDescription = String(localized: "Brought Settings to Dock screen")
+            return
+        }
+
         if app.isTerminated || app.activationPolicy != .regular { return }
 
         if let bundleID = app.bundleIdentifier, policy.ignoredBundleIdentifiers.contains(bundleID) {
@@ -255,7 +263,15 @@ final class DockActivationMonitor: ObservableObject {
             return
         }
 
-        if app.processIdentifier == ProcessInfo.processInfo.processIdentifier { return }
+        // Own app activation via Dock — move Settings to the Dock's screen.
+        if app.processIdentifier == ProcessInfo.processInfo.processIdentifier {
+            if isLikelyDockTriggered() {
+                OpenSettingsAction.bringOwnWindowsToDockScreen()
+                lastEventDescription = String(localized: "Brought Settings to Dock screen")
+            }
+            return
+        }
+
         if app.isTerminated { return }
 
         if let bundleID = app.bundleIdentifier, policy.ignoredBundleIdentifiers.contains(bundleID) {

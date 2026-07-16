@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 110;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -82,11 +82,11 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2700;
-				LastUpgradeCheck = 2700;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					E0905FB230089EB100862CFC = {
-						CreatedOnToolsVersion = 27.0;
+						CreatedOnToolsVersion = 16.0;
 					};
 				};
 			};
@@ -375,5 +375,4 @@
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E0905FAB30089EB100862CFC /* Project object */;
-	validationLevel = 1;
 }

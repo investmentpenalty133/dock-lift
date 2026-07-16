@@ -1,0 +1,43 @@
+# Xcode
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# App packaging
+*.dmg
+*.app
+
+
+dist
+
+.DS_Store
+.cache
+.vscode
+.idea
+
+*.bak
+*.tem
+*.temp
+#.swp
+*.*~
+~*.*
+
+# IDEA
+*.iml
+*.ipr
+*.iws
+.idea/

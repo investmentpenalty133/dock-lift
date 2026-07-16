@@ -1,0 +1,45 @@
+<!--idoc:ignore:start-->
+> [!TIP]
+> 声明：此项目并非开源项目，仓库作为官方网站，用于收集问题和用户需求。这样做是为了节省成本，因为没有官网，应用无法通过审核。
+<!--idoc:ignore:end-->
+
+<div align="center">
+  <br />
+  <br />
+  <img src="./assets/logo.png" width="160" height="160">
+  <h1>
+    DockLift
+  </h1>
+  <!--rehype:style=border: 0;-->
+  <p>
+    <a href="./README.md">English</a> • 
+    <a target="_blank" href="https://github.com/jaywcjlove/docklift/issues/new?template=bug_report_cn.yml">联系&支持</a> • 
+    <a href="./docs/CHANGELOG.zh.md">更新日志</a>
+  </p>
+  <p>
+    <a target="_blank" href="https://jaywcjlove.github.io/maslink/?id=6791646753" title="DockLift for macOS">
+      <img alt="DockLift AppStore" src="https://jaywcjlove.github.io/sb/download/macos.svg" height="51">
+    </a>
+  </p>
+</div>
+
+用 Mac 接了外接显示器时，你在当前屏幕的 Dock 里点了应用，窗口却可能还在另一块屏上——应用明明开着，却不在眼前。
+
+**DockLift** 在菜单栏运行：点击 Dock 图标时，把该应用最近使用的窗口移到**你正在用的这块屏幕**并前置显示，不用再扭头找另一块显示器。
+
+### 功能亮点
+
+- 把窗口带到你点击 Dock 的那块屏幕
+- 应用已在其它屏幕打开时同样有效
+- 可找回最小化窗口
+- 菜单栏一键开关
+- 可忽略不想处理的应用
+
+### 怎么用
+
+1. 打开 DockLift，菜单栏会出现图标。
+2. 系统询问时，允许辅助功能权限（用于移动窗口）。
+3. 保持 DockLift 开启。
+4. 在 Dock 点击应用 — 若窗口在其它屏幕，应出现在你当前使用的屏幕上。
+
+<!--version: v1.0.0-->

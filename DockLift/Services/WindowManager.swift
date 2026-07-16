@@ -50,6 +50,8 @@ struct LiftTarget: Sendable {
     var moveToDockScreen: Bool
     var useMinimizeFallback: Bool
     var includeMinimized: Bool
+    /// ⇧-Dock click: lift every window of the app, not only the most recent one.
+    var liftAllWindows: Bool
 }
 
 /// Result of a lift, including whether Space/display relocation happened.
@@ -57,6 +59,14 @@ struct LiftResult {
     let window: ManagedWindow
     var movedToScreen: Bool
     var movedAcrossSpace: Bool
+}
+
+/// Aggregate result when lifting multiple windows (⇧-Dock).
+struct LiftAllResult {
+    var results: [LiftResult]
+    var movedToScreenCount: Int { results.filter(\.movedToScreen).count }
+    var movedAcrossSpaceCount: Int { results.filter(\.movedAcrossSpace).count }
+    var primaryWindow: ManagedWindow? { results.first?.window }
 }
 
 /// Encapsulates every `AXUIElement` interaction used by DockLift.
@@ -259,8 +269,15 @@ final class WindowManager: @unchecked Sendable {
     }
 
     /// Moves the window onto `screen` via public Accessibility position/size.
+    /// - Parameter cascadeIndex: Offsets stacked windows slightly (⇧ multi-lift).
+    /// - Parameter forceReposition: Reposition even when already on `screen` (cascade).
     @discardableResult
-    func move(_ window: ManagedWindow, to screen: NSScreen) throws -> Bool {
+    func move(
+        _ window: ManagedWindow,
+        to screen: NSScreen,
+        cascadeIndex: Int = 0,
+        forceReposition: Bool = false
+    ) throws -> Bool {
         // Exit full screen first; otherwise position changes are ignored.
         if let isFullscreen = try? copyBoolAttribute("AXFullScreen", of: window.element),
            isFullscreen
@@ -291,18 +308,36 @@ final class WindowManager: @unchecked Sendable {
         }()
 
         let targetID = ScreenCoordinates.displayID(of: screen)
-        if let sourceScreen,
-           ScreenCoordinates.displayID(of: sourceScreen) == targetID
-        {
+        let alreadyOnTarget = sourceScreen.map {
+            ScreenCoordinates.displayID(of: $0) == targetID
+        } ?? false
+
+        if alreadyOnTarget && !forceReposition && cascadeIndex == 0 {
             return false
         }
 
-        let placement = ScreenCoordinates.relocatedAppKitFrame(
+        var placement = ScreenCoordinates.relocatedAppKitFrame(
             currentAXTopLeft: livePosition,
             currentSize: liveSize,
-            from: sourceScreen,
+            from: alreadyOnTarget ? screen : sourceScreen,
             to: screen
         )
+
+        // Cascade so multiple windows do not fully cover each other.
+        if cascadeIndex > 0 {
+            let step: CGFloat = 28
+            placement.origin.x += CGFloat(cascadeIndex) * step
+            placement.origin.y -= CGFloat(cascadeIndex) * step
+            let visible = screen.visibleFrame
+            placement.origin.x = min(
+                max(placement.origin.x, visible.minX),
+                visible.maxX - placement.size.width
+            )
+            placement.origin.y = min(
+                max(placement.origin.y, visible.minY),
+                visible.maxY - placement.size.height
+            )
+        }
 
         let axOrigin = ScreenCoordinates.axTopLeft(
             fromAppKitBottomLeft: placement.origin,
@@ -330,11 +365,16 @@ final class WindowManager: @unchecked Sendable {
     func lift(
         _ window: ManagedWindow,
         app: NSRunningApplication,
-        target: LiftTarget
+        target: LiftTarget,
+        activateApp: Bool = true,
+        focusWindow: Bool = true,
+        cascadeIndex: Int = 0
     ) throws -> LiftResult {
         guard isAccessibilityTrusted else { throw WindowManagerError.notTrusted }
 
-        activate(app)
+        if activateApp {
+            activate(app)
+        }
 
         var movedAcrossSpace = false
         var movedToScreen = false
@@ -370,17 +410,22 @@ final class WindowManager: @unchecked Sendable {
         {
             let alreadyThere = window.displayID == displayID
             if !alreadyThere {
-                movedToScreen = (try? move(window, to: screen)) ?? false
+                movedToScreen = (try? move(window, to: screen, cascadeIndex: cascadeIndex)) ?? false
                 // Retry once after a short yield — some apps ignore the first set.
                 if !movedToScreen {
                     usleep(30_000)
-                    movedToScreen = (try? move(window, to: screen)) ?? false
+                    movedToScreen = (try? move(window, to: screen, cascadeIndex: cascadeIndex)) ?? false
                 }
+            } else if cascadeIndex > 0 {
+                // Already on target; still cascade slightly when lifting many windows.
+                _ = try? move(window, to: screen, cascadeIndex: cascadeIndex, forceReposition: true)
             }
         }
 
         try raise(window)
-        try? focus(window)
+        if focusWindow {
+            try? focus(window)
+        }
 
         // If still not on the target display after raise, force another move.
         if target.moveToDockScreen,
@@ -401,7 +446,7 @@ final class WindowManager: @unchecked Sendable {
                 return ScreenCoordinates.displayID(of: host) != displayID
             }()
             if stillElsewhere {
-                movedToScreen = (try? move(window, to: screen)) ?? false
+                movedToScreen = (try? move(window, to: screen, cascadeIndex: cascadeIndex)) ?? false
                 try? raise(window)
             }
         }
@@ -419,6 +464,15 @@ final class WindowManager: @unchecked Sendable {
         of app: NSRunningApplication,
         target: LiftTarget
     ) throws -> LiftResult {
+        if target.liftAllWindows {
+            let all = try liftAllWindows(of: app, target: target)
+            guard let first = all.results.first else {
+                activate(app)
+                throw WindowManagerError.noWindows
+            }
+            return first
+        }
+
         // When moving to the Dock's display, prefer a window that is *not*
         // already there (e.g. the document parked on an external monitor).
         let preferOffTarget = target.moveToDockScreen && target.screenDisplayID != nil
@@ -432,6 +486,51 @@ final class WindowManager: @unchecked Sendable {
             throw WindowManagerError.noWindows
         }
         return try lift(window, app: app, target: target)
+    }
+
+    /// Lift **every** suitable window of `app` onto the Dock screen (⇧-Dock).
+    @discardableResult
+    func liftAllWindows(
+        of app: NSRunningApplication,
+        target: LiftTarget
+    ) throws -> LiftAllResult {
+        // Prefer off-target first, then by z-order — cascade index follows this order.
+        let list = try windows(
+            for: app,
+            includeMinimized: target.includeMinimized,
+            targetDisplayID: target.screenDisplayID,
+            preferOffTargetDisplay: target.moveToDockScreen && target.screenDisplayID != nil
+        )
+        guard !list.isEmpty else {
+            activate(app)
+            throw WindowManagerError.noWindows
+        }
+
+        activate(app)
+
+        var results: [LiftResult] = []
+        results.reserveCapacity(list.count)
+        for (index, window) in list.enumerated() {
+            let result = try lift(
+                window,
+                app: app,
+                target: target,
+                activateApp: false,
+                focusWindow: index == 0,
+                cascadeIndex: index
+            )
+            results.append(result)
+            // Brief yield so WindowServer applies positions before the next window.
+            if index + 1 < list.count {
+                usleep(20_000)
+            }
+        }
+        // Ensure the frontmost (first) window stays key.
+        if let first = list.first {
+            try? raise(first)
+            try? focus(first)
+        }
+        return LiftAllResult(results: results)
     }
 
     // MARK: - Ranking

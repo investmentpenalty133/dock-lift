@@ -19,8 +19,8 @@ struct GeneralSettingsView: View {
             } footer: {
                 Text(
                     viewModel.onlyWhenDockClick
-                        ? "Windows are lifted when an app is activated via the Dock."
-                        : "Windows are lifted on every application activation (including ⌘Tab)."
+                        ? "Windows are lifted when an app is activated via the Dock. Hold ⇧ while clicking the Dock icon to bring all windows of that app to the current screen."
+                        : "Windows are lifted on every application activation (including ⌘Tab). Hold ⇧ while clicking the Dock icon to bring all windows of that app to the current screen."
                 )
             }
 

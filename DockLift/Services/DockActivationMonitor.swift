@@ -45,6 +45,8 @@ final class DockActivationMonitor: ObservableObject {
     private var lastDockClickAt: Date?
     /// Display id of the screen whose Dock received the last click.
     private var lastDockClickDisplayID: CGDirectDisplayID?
+    /// Whether ⇧ was held during the last Dock click (lift all windows).
+    private var lastDockClickShiftHeld = false
     /// Debounce repeated handling for the same pid.
     private var lastHandled: (pid: pid_t, at: Date)?
     /// Serial generation so delayed dock re-click tasks can be cancelled logically.
@@ -74,16 +76,18 @@ final class DockActivationMonitor: ObservableObject {
         }
 
         // Global monitors only — local monitors break Settings hit-testing.
-        mouseDownMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown]) { [weak self] _ in
+        mouseDownMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown]) { [weak self] event in
             let location = NSEvent.mouseLocation
+            let shift = event.modifierFlags.contains(.shift)
             Task { @MainActor [weak self] in
-                self?.recordPotentialDockClick(at: location)
+                self?.recordPotentialDockClick(at: location, shiftHeld: shift)
             }
         }
-        mouseUpMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseUp]) { [weak self] _ in
+        mouseUpMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseUp]) { [weak self] event in
             let location = NSEvent.mouseLocation
+            let shift = event.modifierFlags.contains(.shift)
             Task { @MainActor [weak self] in
-                self?.recordPotentialDockMouseUp(at: location)
+                self?.recordPotentialDockMouseUp(at: location, shiftHeld: shift)
             }
         }
 
@@ -111,16 +115,17 @@ final class DockActivationMonitor: ObservableObject {
 
     // MARK: - Click tracking
 
-    private func recordPotentialDockClick(at location: CGPoint) {
+    private func recordPotentialDockClick(at location: CGPoint, shiftHeld: Bool) {
         guard let dockScreen = DockGeometry.screenHostingDock(at: location) else { return }
 
         lastDockClickAt = Date()
         lastDockClickDisplayID = ScreenCoordinates.displayID(of: dockScreen)
+        lastDockClickShiftHeld = shiftHeld
         dockClickGeneration &+= 1
         let generation = dockClickGeneration
 
         log.debug(
-            "Dock click on display \(self.lastDockClickDisplayID ?? 0, privacy: .public) at \(location.x, privacy: .public),\(location.y, privacy: .public)"
+            "Dock click on display \(self.lastDockClickDisplayID ?? 0, privacy: .public) shift=\(shiftHeld, privacy: .public)"
         )
 
         // Already-frontmost apps do not emit didActivateApplication when their
@@ -132,7 +137,7 @@ final class DockActivationMonitor: ObservableObject {
         }
     }
 
-    private func recordPotentialDockMouseUp(at location: CGPoint) {
+    private func recordPotentialDockMouseUp(at location: CGPoint, shiftHeld: Bool) {
         // If the press started on the Dock, keep the dock-click timestamp fresh
         // through mouse-up (activation often lands between down and up).
         if let lastDockClickAt, Date().timeIntervalSince(lastDockClickAt) < 0.9 {
@@ -140,11 +145,24 @@ final class DockActivationMonitor: ObservableObject {
                 || DockGeometry.contains(location)
             {
                 self.lastDockClickAt = Date()
+                // Prefer shift flag from the up event if still held.
+                if shiftHeld {
+                    lastDockClickShiftHeld = true
+                }
                 if let screen = DockGeometry.screenHostingDock(at: location) {
                     lastDockClickDisplayID = ScreenCoordinates.displayID(of: screen)
                 }
             }
         }
+    }
+
+    /// Whether the last Dock interaction was a ⇧-click (lift all windows).
+    private func isShiftDockClick() -> Bool {
+        guard lastDockClickShiftHeld else { return false }
+        guard let lastDockClickAt, Date().timeIntervalSince(lastDockClickAt) < 0.9 else {
+            return false
+        }
+        return true
     }
 
     /// Heuristic: activation soon after a Dock-region click, or pointer still over Dock.
@@ -230,8 +248,11 @@ final class DockActivationMonitor: ObservableObject {
         }
 
         lastHandled = (app.processIdentifier, Date())
-        log.info("Dock re-click of already-frontmost app \(app.localizedName ?? "?", privacy: .public)")
-        lift(app: app, policy: policy)
+        let shift = isShiftDockClick()
+        log.info(
+            "Dock re-click of already-frontmost app \(app.localizedName ?? "?", privacy: .public) shift=\(shift, privacy: .public)"
+        )
+        lift(app: app, policy: policy, liftAllWindows: shift)
     }
 
     // MARK: - Activation
@@ -299,10 +320,14 @@ final class DockActivationMonitor: ObservableObject {
         }
         lastHandled = (app.processIdentifier, Date())
 
-        lift(app: app, policy: policy)
+        lift(app: app, policy: policy, liftAllWindows: isShiftDockClick())
     }
 
-    private func lift(app: NSRunningApplication, policy: LiftPolicy) {
+    private func lift(
+        app: NSRunningApplication,
+        policy: LiftPolicy,
+        liftAllWindows: Bool
+    ) {
         let name = app.localizedName ?? app.bundleIdentifier ?? String(localized: "App")
         let displayID = targetDisplayID()
 
@@ -311,10 +336,24 @@ final class DockActivationMonitor: ObservableObject {
             preferMoveToCurrentSpace: policy.preferMoveToCurrentSpace,
             moveToDockScreen: policy.moveToDockScreen,
             useMinimizeFallback: policy.useMinimizeFallback,
-            includeMinimized: policy.includeMinimizedWindows
+            includeMinimized: policy.includeMinimizedWindows,
+            liftAllWindows: liftAllWindows
         )
 
         do {
+            if liftAllWindows {
+                let all = try windowManager.liftAllWindows(of: app, target: target)
+                lastLiftedAppName = name
+                let count = all.results.count
+                lastEventDescription = String(
+                    format: String(localized: "Lifted %lld windows of %@ to Dock screen"),
+                    Int64(count),
+                    name
+                )
+                log.info("Lifted \(count, privacy: .public) windows for \(name, privacy: .public) (⇧-Dock)")
+                return
+            }
+
             let result = try windowManager.liftMostRecentWindow(of: app, target: target)
             lastLiftedAppName = name
 

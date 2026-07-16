@@ -793,29 +793,6 @@
         }
       }
     },
-    "DockLift will not lift windows for these bundle identifiers. Finder and DockLift itself are ignored by default." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DockLift will not lift windows for these bundle identifiers. Finder and DockLift itself are ignored by default."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DockLift 不会为这些 Bundle 标识符提升窗口。默认忽略“访达”和 DockLift 自身。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DockLift 不會為這些 Bundle 識別碼提升視窗。預設忽略「Finder」與 DockLift 本身。"
-          }
-        }
-      }
-    },
     "Drop an app here" : {
       "localizations" : {
         "en" : {
@@ -1212,6 +1189,28 @@
         }
       }
     },
+    "Lifted %lld windows of %@ to Dock screen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lifted %lld windows of %@ to Dock screen"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已将 %2$@ 的 %1$lld 个窗口移到当前屏幕"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已將 %2$@ 的 %1$lld 個視窗移到目前螢幕"
+          }
+        }
+      }
+    },
     "Monitor" : {
       "localizations" : {
         "en" : {
@@ -1476,29 +1475,6 @@
         }
       }
     },
-    "Open System Settings" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open System Settings"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开系统设置"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打開系統設定"
-          }
-        }
-      }
-    },
     "or choose one with the buttons below" : {
       "localizations" : {
         "en" : {
@@ -1649,29 +1625,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "移除"
-          }
-        }
-      }
-    },
-    "Request Access…" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Request Access…"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请求权限…"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "要求權限…"
           }
         }
       }
@@ -2160,46 +2113,46 @@
         }
       }
     },
-    "Windows are lifted on every application activation (including ⌘Tab)." : {
+    "Windows are lifted on every application activation (including ⌘Tab). Hold ⇧ while clicking the Dock icon to bring all windows of that app to the current screen." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Windows are lifted on every application activation (including ⌘Tab)."
+            "value" : "Windows are lifted on every application activation (including ⌘Tab). Hold ⇧ while clicking the Dock icon to bring all windows of that app to the current screen."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "每次应用激活时都会提升窗口（包括 ⌘Tab）。"
+            "value" : "每次应用激活时都会提升窗口（包括 ⌘Tab）。按住 ⇧ 再点击 Dock 图标，可将该应用的所有窗口移到当前屏幕。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "每次 App 啟用時都會提升視窗（包括 ⌘Tab）。"
+            "value" : "每次 App 啟用時都會提升視窗（包括 ⌘Tab）。按住 ⇧ 再點按 Dock 圖示，可將該 App 的所有視窗移到目前螢幕。"
           }
         }
       }
     },
-    "Windows are lifted when an app is activated via the Dock." : {
+    "Windows are lifted when an app is activated via the Dock. Hold ⇧ while clicking the Dock icon to bring all windows of that app to the current screen." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Windows are lifted when an app is activated via the Dock."
+            "value" : "Windows are lifted when an app is activated via the Dock. Hold ⇧ while clicking the Dock icon to bring all windows of that app to the current screen."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "通过 Dock 激活应用时，会将其窗口提升到当前桌面。"
+            "value" : "通过 Dock 激活应用时会提升窗口。按住 ⇧ 再点击 Dock 图标，可将该应用的所有窗口移到当前屏幕。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "透過 Dock 啟用 App 時，會將其視窗提升到目前桌面。"
+            "value" : "透過 Dock 啟用 App 時會提升視窗。按住 ⇧ 再點按 Dock 圖示，可將該 App 的所有視窗移到目前螢幕。"
           }
         }
       }

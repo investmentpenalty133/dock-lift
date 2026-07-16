@@ -32,8 +32,8 @@ enum AppSettings {
         Key.launchAtLogin: false,
         Key.showStatusItemTitle: false,
         Key.ignoredBundleIdentifiers: [
-            "com.apple.finder",
-            Bundle.main.bundleIdentifier ?? "com.wangchujiang.docklift"
+//            "com.apple.finder",
+//            Bundle.main.bundleIdentifier ?? "com.wangchujiang.docklift"
         ] as [String]
     ]
 

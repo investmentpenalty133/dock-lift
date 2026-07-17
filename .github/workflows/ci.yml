@@ -29,6 +29,10 @@ jobs:
               <img alt="DockLift AppStore" src="https://jaywcjlove.github.io/sb/download/macos.svg" height="51">
             </a>
 
+            ```shell
+            $ brew install --cask jaywcjlove/tap/dock-lift
+            ```
+
       - name: Get latest tag
         id: get_latest_tag
         run: echo "LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV

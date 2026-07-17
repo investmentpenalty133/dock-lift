@@ -9,7 +9,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        <img align="right" height="100" alt="DockLift" src="https://github.com/user-attachments/assets/0251eee3-1ab8-4858-ac0d-d4da7f3d5403" /> 
+        <img align="right" height="100" alt="DockLift" src="https://github.com/jaywcjlove/dock-lift/raw/main/assets/logo.png" /> 
 
         **DockLift** 让应用窗口来到你点击 Dock 时所在的那块屏幕。用 Mac 接了外接显示器时，你在当前屏幕的 Dock 里点了应用，窗口却可能还在另一块屏上——应用明明开着，却不在眼前。DockLift 会把窗口移到你正在用的这块屏幕并前置显示。
 

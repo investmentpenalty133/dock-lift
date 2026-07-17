@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        <img align="right" height="86" alt="DockLift" src="https://github.com/user-attachments/assets/0251eee3-1ab8-4858-ac0d-d4da7f3d5403"> Please provide as much detail as possible about your support request or feedback.
+        <img align="right" height="86" alt="DockLift" src="https://github.com/jaywcjlove/dock-lift/raw/main/assets/logo.png"> Please provide as much detail as possible about your support request or feedback.
 
         **DockLift** brings an app’s window to the screen where you click its Dock icon. On a Mac with more than one display, the window may still be on another monitor when you click the Dock—open, but not in front of you. DockLift moves that window to the screen you’re on and brings it to the front.
 

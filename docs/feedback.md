@@ -16,6 +16,6 @@ You can contact us through the app or by emailing **kennyiseeyou@gmail.com**.
 
 - [**Email**: kennyiseeyou@gmail.com](mailto:kennyiseeyou@gmail.com)  
 - [**Social**: Twitter/X @jaywcjlove](https://twitter.com/jaywcjlove)  
-- [**GitHub Issue**](https://github.com/jaywcjlove/docklift/issues/new/choose)  
+- [**GitHub Issue**](https://github.com/jaywcjlove/dock-lift/issues/new/choose)  
 
 Thank you for using DockLift.

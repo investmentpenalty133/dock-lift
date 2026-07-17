@@ -6,7 +6,7 @@
 	<key>SUPublicEDKey</key>
 	<string>3IzaOZVeFMZbhGS38M7xgf1E0d+p5csTVH6hEX4+2ls=</string>
 	<key>SUFeedURL</key>
-	<string>https://jaywcjlove.github.io/docklift/appcast.xml</string>
+	<string>https://jaywcjlove.github.io/dock-lift/appcast.xml</string>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUScheduledCheckInterval</key>

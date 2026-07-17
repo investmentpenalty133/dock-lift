@@ -18,15 +18,14 @@
   </p>
 </div>
 
-![](./assets/docklift.gif)
-
-![](./assets/screenshots-1.png)
-
-
 ```shell
 # Installation (automatically installs to /Applications)
 $ brew install --cask jaywcjlove/tap/dock-lift
 ```
+
+![](./assets/docklift.gif)
+
+![](./assets/screenshots-1.png)
 
 Using a Mac with more than one display, you may click an app in the Dock only to find its window still on the other screen—open, but not in front of you.
 

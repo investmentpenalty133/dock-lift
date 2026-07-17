@@ -18,15 +18,14 @@
   </p>
 </div>
 
-![](./assets/docklift.gif)
-
-![](./assets/screenshots-1.png)
-
-
 ```shell
 # 安装（自动到 /Applications）
 $ brew install --cask jaywcjlove/tap/dock-lift
 ```
+
+![](./assets/docklift.gif)
+
+![](./assets/screenshots-1.png)
 
 用 Mac 接了外接显示器时，你在当前屏幕的 Dock 里点了应用，窗口却可能还在另一块屏上——应用明明开着，却不在眼前。
 

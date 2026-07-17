@@ -18,6 +18,10 @@
   </p>
 </div>
 
+![](./assets/docklift.gif)
+
+![](./assets/screenshots-1.png)
+
 Using a Mac with more than one display, you may click an app in the Dock only to find its window still on the other screen—open, but not in front of you.
 
 **DockLift** lives in the menu bar and, when you click a Dock icon, moves that app’s recent window to **the screen you’re on** and brings it to the front.

@@ -41,6 +41,10 @@ struct MenuBarView: View {
         }
         .keyboardShortcut(",", modifiers: .command)
 
+        CheckForUpdatesButton()
+
+        Divider()
+
         Button("Quit DockLift") {
             NSApplication.shared.terminate(nil)
         }

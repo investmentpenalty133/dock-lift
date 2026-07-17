@@ -56,6 +56,11 @@ struct AboutSettingsView: View {
                 .font(.caption)
                 .foregroundStyle(.tertiary)
                 .padding(.top, 4)
+
+            CheckForUpdatesButton()
+                .buttonStyle(.bordered)
+                .controlSize(.regular)
+                .padding(.top, 8)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .padding(20)

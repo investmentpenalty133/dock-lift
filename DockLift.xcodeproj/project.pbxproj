@@ -9,15 +9,29 @@
 /* Begin PBXBuildFile section */
 		E09060E33008E73E00862CFC /* PermissionFlow in Frameworks */ = {isa = PBXBuildFile; productRef = A100000200089EB100862CF2 /* PermissionFlow */; };
 		E09060E43008E73E00862CFC /* PermissionFlowStatusStore in Frameworks */ = {isa = PBXBuildFile; productRef = A100000300089EB100862CF3 /* PermissionFlowStatusStore */; };
+		E09060E53008E73E00862CFC /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = A100000500089EB100862CF5 /* Sparkle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E0905FB330089EB100862CFC /* DockLift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockLift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E0905FB630089EB100862CFC /* Exceptions for "DockLift" folder in "DockLift" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E0905FB230089EB100862CFC /* DockLift */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E0905FB530089EB100862CFC /* DockLift */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E0905FB630089EB100862CFC /* Exceptions for "DockLift" folder in "DockLift" target */,
+			);
 			path = DockLift;
 			sourceTree = "<group>";
 		};
@@ -30,6 +44,7 @@
 			files = (
 				E09060E43008E73E00862CFC /* PermissionFlowStatusStore in Frameworks */,
 				E09060E33008E73E00862CFC /* PermissionFlow in Frameworks */,
+				E09060E53008E73E00862CFC /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +89,7 @@
 			packageProductDependencies = (
 				A100000200089EB100862CF2 /* PermissionFlow */,
 				A100000300089EB100862CF3 /* PermissionFlowStatusStore */,
+				A100000500089EB100862CF5 /* Sparkle */,
 			);
 			productName = DockLift;
 			productReference = E0905FB330089EB100862CFC /* DockLift.app */;
@@ -107,6 +123,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				A100000100089EB100862CF1 /* XCRemoteSwiftPackageReference "PermissionFlow" */,
+				A100000400089EB100862CF4 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E0905FB430089EB100862CFC /* Products */;
@@ -283,6 +300,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DockLift/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Dock Lift";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -321,6 +339,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DockLift/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Dock Lift";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -375,6 +394,14 @@
 				version = 2.6.0;
 			};
 		};
+		A100000400089EB100862CF4 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.6.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -387,6 +414,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A100000100089EB100862CF1 /* XCRemoteSwiftPackageReference "PermissionFlow" */;
 			productName = PermissionFlowStatusStore;
+		};
+		A100000500089EB100862CF5 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A100000400089EB100862CF4 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

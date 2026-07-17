@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Sparkle 2 — public EdDSA key from generate_keys (private key stays in Keychain) -->
+	<key>SUPublicEDKey</key>
+	<string>3IzaOZVeFMZbhGS38M7xgf1E0d+p5csTVH6hEX4+2ls=</string>
+	<key>SUFeedURL</key>
+	<string>https://jaywcjlove.github.io/docklift/appcast.xml</string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
+</dict>
+</plist>

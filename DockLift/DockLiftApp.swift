@@ -64,6 +64,12 @@ struct DockLiftApp: App {
                     }
                 }
         }
+        .commands {
+            // DockLift menu (when app is frontmost, e.g. Settings open)
+            CommandGroup(after: .appInfo) {
+                CheckForUpdatesButton()
+            }
+        }
     }
 
     private var menuBarSymbol: String {

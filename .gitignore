@@ -20,9 +20,11 @@ xcuserdata/
 # App packaging
 *.dmg
 *.app
+*.zip
 
 
 dist
+
 
 .DS_Store
 .cache

@@ -9,7 +9,8 @@
   <p>
     <a href="./README.zh.md">简体中文</a> • 
     <a target="_blank" href="https://github.com/jaywcjlove/docklift/issues/new?template=bug_report.yml">Contact & Support</a> • 
-    <a href="./docs/CHANGELOG.md">Changelog</a>
+    <a href="./docs/CHANGELOG.md">Changelog</a> • 
+    <a target="_blank" href="https://x.com/jaywcjlove">𝕏</a>
   </p>
   <p>
     <a target="_blank" href="https://github.com/jaywcjlove/dock-lift/releases/latest/" title="DockLift for macOS">

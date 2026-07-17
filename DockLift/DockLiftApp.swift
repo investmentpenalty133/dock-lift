@@ -37,7 +37,8 @@ struct DockLiftApp: App {
         .windowResizability(.contentSize)
         .defaultSize(width: 460, height: 280)
 
-        // 3) Status item
+        // 3) Status item — `.window` so Enable can use a switch control
+        //    (`.menu` style only supports checkmark-style toggles).
         MenuBarExtra {
             MenuBarView()
                 .environmentObject(viewModel)
@@ -45,7 +46,7 @@ struct DockLiftApp: App {
         } label: {
             Label("DockLift", systemImage: menuBarSymbol)
         }
-        .menuBarExtraStyle(.menu)
+        .menuBarExtraStyle(.window)
 
         // 4) Settings scene (after bootstrap Window)
         Settings {

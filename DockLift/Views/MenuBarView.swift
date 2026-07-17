@@ -2,7 +2,8 @@
 //  MenuBarView.swift
 //  DockLift
 //
-//  Menu content for the MenuBarExtra status item (`.menu` style).
+//  MenuBarExtra content (`.window` style) so Enable can use a real switch.
+//  Rows use menu-like hover highlighting (`.menu` style cannot draw switches).
 //
 
 import AppKit
@@ -10,44 +11,149 @@ import SwiftUI
 
 struct MenuBarView: View {
     @EnvironmentObject private var viewModel: AppViewModel
+    @ObservedObject private var updater = SparkleUpdater.shared
 
     var body: some View {
-        Toggle("Enable DockLift", isOn: $viewModel.isEnabled)
-            .disabled(!viewModel.hasAccessibilityPermission)
-
-        Divider()
-
-        if viewModel.hasAccessibilityPermission {
-            Text("Accessibility: Granted")
-        } else {
-            Button("Grant Accessibility…") {
-                viewModel.requestAccessibility()
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 12) {
+                Text("Enable DockLift")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Toggle(isOn: $viewModel.isEnabled) {
+                    EmptyView()
+                }
+                .toggleStyle(.switch)
+                .labelsHidden()
+                .controlSize(.small)
+                .disabled(!viewModel.hasAccessibilityPermission)
+                .accessibilityLabel(Text("Enable DockLift"))
             }
+            .padding(.leading, 12)
+            .padding(.trailing, 8)
+            .padding(.vertical, 6)
+
+            Divider()
+
+            VStack(alignment: .leading, spacing: 6) {
+                if viewModel.hasAccessibilityPermission {
+                    HStack(spacing: 6) {
+                        Image(systemName: "checkmark.shield").foregroundStyle(.green)
+                        Text("Accessibility: Granted")
+                    }
+                    .foregroundStyle(.secondary)
+                    .padding(.leading, 12)
+                } else {
+                    menuRowButton("Grant Accessibility…", systemImage: "hand.raised") {
+                        viewModel.requestAccessibility()
+                    }
+                }
+
+                Text(viewModel.monitor.isRunning ? "Status: Monitoring" : "Status: Paused")
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 12)
+
+                if !viewModel.monitor.lastEventDescription.isEmpty {
+                    Text(viewModel.monitor.lastEventDescription)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(3)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, 12)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 8)
+
+            Divider()
+
+            VStack(spacing: 0) {
+                menuRowButton("Settings…", systemImage: "gearshape") {
+                    viewModel.openSettingsOrPermissionGate()
+                }
+                .keyboardShortcut(",", modifiers: .command)
+
+                menuRowButton("Check for Updates…", systemImage: "arrow.triangle.2.circlepath") {
+                    updater.checkForUpdates()
+                }
+                .disabled(!updater.canCheckForUpdates)
+            }
+
+            Divider()
+
+            menuRowButton("Quit DockLift", systemImage: "power") {
+                NSApplication.shared.terminate(nil)
+            }
+            .keyboardShortcut("q", modifiers: .command)
         }
+        .frame(width: 280)
+        .padding(.vertical, 4)
+        .padding(.horizontal, 4)
+    }
 
-        Text(viewModel.monitor.isRunning ? "Status: Monitoring" : "Status: Paused")
-
-        if !viewModel.monitor.lastEventDescription.isEmpty {
-            Text(viewModel.monitor.lastEventDescription)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
+    private func menuRowButton(
+        _ title: LocalizedStringKey,
+        systemImage: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            Label(title, systemImage: systemImage)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
         }
+        .buttonStyle(MenuBarRowButtonStyle())
+    }
+}
 
-        Divider()
+// MARK: - Menu-like hover highlight
 
-        Button("Settings…") {
-            // Gate: no Accessibility → permission window first.
-            viewModel.openSettingsOrPermissionGate()
+/// Approximates `NSMenuItem` selection: rounded fill + inverted label on hover.
+private struct MenuBarRowButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        MenuBarRowButton(configuration: configuration)
+    }
+}
+
+private struct MenuBarRowButton: View {
+    let configuration: ButtonStyleConfiguration
+    @Environment(\.isEnabled) private var isEnabled
+    @State private var isHovering = false
+
+    var body: some View {
+        configuration.label
+            .labelStyle(.titleAndIcon)
+            .font(.body)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(rowBackground)
+            .foregroundStyle(rowForeground)
+            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+            .contentShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+            .opacity(isEnabled ? 1 : 0.4)
+            .onHover { hovering in
+                guard isEnabled else {
+                    isHovering = false
+                    return
+                }
+                isHovering = hovering
+            }
+            .animation(.easeInOut(duration: 0.08), value: isHovering)
+            .animation(.easeInOut(duration: 0.08), value: configuration.isPressed)
+    }
+
+    private var rowBackground: Color {
+        guard isEnabled else { return .clear }
+        if configuration.isPressed {
+            return Color.accentColor.opacity(0.85)
         }
-        .keyboardShortcut(",", modifiers: .command)
-
-        CheckForUpdatesButton()
-
-        Divider()
-
-        Button("Quit DockLift") {
-            NSApplication.shared.terminate(nil)
+        if isHovering {
+            return Color.accentColor
         }
-        .keyboardShortcut("q", modifiers: .command)
+        return .clear
+    }
+
+    private var rowForeground: Color {
+        if isEnabled, isHovering || configuration.isPressed {
+            return .white
+        }
+        return .primary
     }
 }

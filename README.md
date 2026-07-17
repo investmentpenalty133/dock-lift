@@ -12,7 +12,7 @@
     <a href="./docs/CHANGELOG.md">Changelog</a>
   </p>
   <p>
-    <a target="_blank" href="https://jaywcjlove.github.io/maslink/?id=6791646753" title="DockLift for macOS">
+    <a target="_blank" href="https://github.com/jaywcjlove/dock-lift/releases/latest/" title="DockLift for macOS">
       <img alt="DockLift AppStore" src="https://jaywcjlove.github.io/sb/download/macos.svg" height="51">
     </a>
   </p>
@@ -21,6 +21,12 @@
 ![](./assets/docklift.gif)
 
 ![](./assets/screenshots-1.png)
+
+
+```shell
+# Installation (automatically installs to /Applications)
+$ brew install --cask jaywcjlove/tap/dock-lift
+```
 
 Using a Mac with more than one display, you may click an app in the Dock only to find its window still on the other screen—open, but not in front of you.
 

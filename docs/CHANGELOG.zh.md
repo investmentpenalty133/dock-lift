@@ -6,8 +6,8 @@
 更新日志
 ===
 
-<a target="_blank" href="https://jaywcjlove.github.io/maslink/?id=6791646753" title="DockLift for macOS">
+<a target="_blank" href="https://github.com/jaywcjlove/dock-lift/releases/latest/" title="DockLift for macOS">
   <img alt="DockLift AppStore" src="https://jaywcjlove.github.io/sb/download/macos.svg" height="51">
 </a>
 
-## [v0.0.1](https://github.com/jaywcjlove/docklift/releases/tag/v0.0.1)
+## [v0.0.1](https://github.com/jaywcjlove/dock-lift/releases/tag/v0.0.1)

